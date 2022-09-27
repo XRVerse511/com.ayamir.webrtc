@@ -1,11 +1,12 @@
 @echo off
 
+set LIBWEBRTC_DOWNLOAD_URL=http://10.112.79.143:5555/files/webrtc.zip
 set SOLUTION_DIR=%cd%\Plugin~
 
 echo -------------------
 echo Download LibWebRTC
 
-scp ayamir@10.112.79.143:/home/ayamir/webrtc.zip webrtc.zip
+curl -L %LIBWEBRTC_DOWNLOAD_URL% > webrtc.zip
 7z x -aoa webrtc.zip -o%SOLUTION_DIR%\webrtc
 
 echo -------------------
