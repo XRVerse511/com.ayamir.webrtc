@@ -74,7 +74,7 @@ namespace Unity.WebRTC
         Failed = 4,
         Disconnected = 5,
         Closed = 6,
-        Max =7
+        Max = 7
     }
 
     /// <summary>
@@ -177,7 +177,7 @@ namespace Unity.WebRTC
     public struct RTCOfferAnswerOptions
     {
         public static RTCOfferAnswerOptions Default =
-            new RTCOfferAnswerOptions {iceRestart = false, voiceActivityDetection = true};
+            new RTCOfferAnswerOptions { iceRestart = false, voiceActivityDetection = true };
 
         /// <summary>
         ///
@@ -318,11 +318,11 @@ namespace Unity.WebRTC
     public static class WebRTC
     {
 #if UNITY_EDITOR_OSX
-        internal const string Lib = "Packages/com.unity.webrtc/Runtime/Plugins/macOS/webrtc.bundle/Contents/MacOS/webrtc";
+        internal const string Lib = "Packages/com.ayamir.webrtc/Runtime/Plugins/macOS/webrtc.bundle/Contents/MacOS/webrtc";
 #elif UNITY_EDITOR_LINUX
-        internal const string Lib = "Packages/com.unity.webrtc/Runtime/Plugins/x86_64/libwebrtc.so";
+        internal const string Lib = "Packages/com.ayamir.webrtc/Runtime/Plugins/x86_64/libwebrtc.so";
 #elif UNITY_EDITOR_WIN
-        internal const string Lib = "Packages/com.unity.webrtc/Runtime/Plugins/x86_64/webrtc.dll";
+        internal const string Lib = "Packages/com.ayamir.webrtc/Runtime/Plugins/x86_64/webrtc.dll";
 #elif UNITY_STANDALONE
         internal const string Lib = "webrtc";
 #elif UNITY_IOS
@@ -387,7 +387,7 @@ namespace Unity.WebRTC
 #if UNITY_IOS && !UNITY_EDITOR
             NativeMethods.RegisterRenderingWebRTCPlugin();
 #endif
-            s_context = Context.Create(encoderType:type, forTest:forTest);
+            s_context = Context.Create(encoderType: type, forTest: forTest);
             NativeMethods.SetCurrentContext(s_context.self);
             s_syncContext = SynchronizationContext.Current;
             var flipShader = Resources.Load<Shader>("Flip");
@@ -510,7 +510,7 @@ namespace Unity.WebRTC
             // can't recognize legacy format
             const int LegacyARGB32_sRGB = 87;
             const int LegacyARGB32_UNorm = 88;
-            if ((int) format == LegacyARGB32_sRGB || (int) format == LegacyARGB32_UNorm)
+            if ((int)format == LegacyARGB32_sRGB || (int)format == LegacyARGB32_UNorm)
             {
                 return;
             }
@@ -665,7 +665,7 @@ namespace Unity.WebRTC
         {
             if (Context.table.ContainsKey(ptr))
             {
-                if(Context.table[ptr] is T value)
+                if (Context.table[ptr] is T value)
                     return value;
                 throw new InvalidCastException($"{ptr} is not {typeof(T).Name}");
             }
@@ -981,7 +981,7 @@ namespace Unity.WebRTC
         [DllImport(WebRTC.Lib)]
         public static extern RTCDataChannelState DataChannelGetReadyState(IntPtr ptr);
         [DllImport(WebRTC.Lib)]
-        public static extern void DataChannelSend(IntPtr ptr, [MarshalAs(UnmanagedType.LPStr)]string msg);
+        public static extern void DataChannelSend(IntPtr ptr, [MarshalAs(UnmanagedType.LPStr)] string msg);
         [DllImport(WebRTC.Lib)]
         public static extern void DataChannelSendBinary(IntPtr ptr, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] byte[] bytes, int size);
         [DllImport(WebRTC.Lib)]
