@@ -1208,6 +1208,7 @@ extern "C"
             if(src->encodings[i].rid != nullptr)
                 dst.encodings[i].rid = std::string(src->encodings[i].rid);
         }
+        // DONE: Guarante frame rate first
         dst.degradation_preference = DegradationPreference::MAINTAIN_FRAMERATE;
         const ::webrtc::RTCError error = sender->SetParameters(dst);
         return error.type();
