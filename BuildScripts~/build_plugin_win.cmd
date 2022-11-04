@@ -1,12 +1,9 @@
 @echo off
 
-set LIBWEBRTC_DOWNLOAD_URL=http://10.112.79.143:6001/webrtc.zip
+set LIBWEBRTC_PATH=%cd%\..\webrtc-checkout\artifacts\webrtc.zip
 set SOLUTION_DIR=%cd%\Plugin~
 
-echo -------------------
-echo Download LibWebRTC
-
-curl -L %LIBWEBRTC_DOWNLOAD_URL% > webrtc.zip
+copy %LIBWEBRTC_PATH% .
 7z x -aoa webrtc.zip -o%SOLUTION_DIR%\webrtc
 
 echo -------------------
