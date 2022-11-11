@@ -1,6 +1,6 @@
 @echo off
 
-set LIBWEBRTC_PATH=%cd%\..\webrtc-checkout\artifacts\webrtc.zip
+set LIBWEBRTC_PATH=%cd%\..\..\webrtc-checkout\artifacts\webrtc.zip
 set SOLUTION_DIR=%cd%\Plugin~
 
 copy %LIBWEBRTC_PATH% .
@@ -10,5 +10,5 @@ echo -------------------
 echo Build com.unity.webrtc Plugin
 
 cd %SOLUTION_DIR%
-cmake . -G "Visual Studio 16 2019" -A x64 -B "build64"
-cmake --build build64 --config Release --target WebRTCPlugin
+cmake --preset=x64-windows-clang
+cmake --build --preset=release-windows-clang --target=WebRTCPlugin

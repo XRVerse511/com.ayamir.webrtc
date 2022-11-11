@@ -41,12 +41,12 @@ if(XCODE)
  if(${XCODE_VERSION} VERSION_GREATER_EQUAL 12.0.0 AND
     ${XCODE_VERSION} VERSION_LESS 11.0.0
   )
-    message(FATAL_ERROR 
+    message(FATAL_ERROR
       "The required Xcode version is 11.0 or higher and 12.0 or higher is not supported.")
   endif()
 endif()
 
-# enable debug output 
+# enable debug output
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_FLAGS_DEBUG "-g3 -O0 -D_DEBUG")
 
@@ -58,7 +58,7 @@ endif()
 set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
 find_package(Threads REQUIRED)
 
-list(APPEND CMAKE_MODULE_PATH 
+list(APPEND CMAKE_MODULE_PATH
   "${CMAKE_SOURCE_DIR}/cmake"
 )
 
