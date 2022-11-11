@@ -84,7 +84,7 @@ namespace webrtc
 #pragma region open an encode session
     uint32_t Context::s_encoderId = 0;
     uint32_t Context::GenerateUniqueId() { return s_encoderId++; }
-#pragma endregion 
+#pragma endregion
 
     bool Convert(const std::string& str, webrtc::PeerConnectionInterface::RTCConfiguration& config)
     {
@@ -370,7 +370,7 @@ namespace webrtc
     VideoTrackSourceInterface* Context::CreateVideoSource()
     {
         rtc::scoped_refptr<UnityVideoTrackSource> source =
-            new rtc::RefCountedObject<UnityVideoTrackSource>(false, nullptr);
+            new rtc::RefCountedObject<UnityVideoTrackSource>(false, absl::nullopt);
 
         AddRefPtr(source);
         return source;
