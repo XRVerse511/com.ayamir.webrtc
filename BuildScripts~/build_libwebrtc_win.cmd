@@ -1,53 +1,35 @@
 @echo off
 
-if not exist depot_tools (
-  git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git
-)
-
 set COMMAND_DIR=%~dp0
-set PATH=%cd%\depot_tools;%PATH%
-set WEBRTC_VERSION=4389
-set DEPOT_TOOLS_WIN_TOOLCHAIN=0
+set ARTIFACTS_DIR=%cd%\artifacts
+set OUTPUT_DIR=out
 set CPPFLAGS=/WX-
+set WEBRTC_ZIP=webrtc.zip
 set GYP_GENERATORS=ninja,msvs-ninja
 set GYP_MSVS_VERSION=2019
-set OUTPUT_DIR=out
-set ARTIFACTS_DIR=%cd%\artifacts
-set PYPI_URL=https://artifactory.prd.it.unity3d.com/artifactory/api/pypi/pypi/simple
-set vs2019_install=C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional
+set DEPOT_TOOLS_WIN_TOOLCHAIN=0
+set vs2019_install=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community
 
-if not exist src (
-  powershell -Command "get-content depot_tools\update_depot_tools.bat | foreach-object {$_ -replace \"origin/master\",\"origin/main\"} | add-content depot_tools\update_depot_tools.bat.edited"
-  move /Y depot_tools\update_depot_tools.bat.edited depot_tools\update_depot_tools.bat
-  call fetch.bat --nohooks webrtc
-  cd src
-  call git.bat config --system core.longpaths true
-  call git.bat checkout  refs/remotes/branch-heads/%WEBRTC_VERSION%
-  cd ..
-  call gclient.bat sync -f
+if not exist "%ARTIFACTS_DIR%\lib" (
+  mkdir "%ARTIFACTS_DIR%\lib"
 )
 
-rem add jsoncpp
-patch -N "src\BUILD.gn" < "%COMMAND_DIR%\patches\add_jsoncpp.patch"
-
-rem install pywin32
-call "%cd%\depot_tools\bootstrap-3_8_0_chromium_8_bin\python\bin\python.exe" ^
-  -m pip install pywin32 --index-url "%PYPI_URL%" --upgrade
-
-mkdir "%ARTIFACTS_DIR%\lib"
+if not exist %OUTPUT_DIR% (
+  mkdir "%OUTPUT_DIR%"
+)
 
 setlocal enabledelayedexpansion
 
 for %%i in (x64) do (
   mkdir "%ARTIFACTS_DIR%/lib/%%i"
-  for %%j in (true false) do (
+  for %%j in (false true) do (
 
     rem generate ninja for release
-    call gn.bat gen %OUTPUT_DIR% --root="src" ^
-      --args="is_debug=%%j is_clang=false target_cpu=\"%%i\" rtc_include_tests=false rtc_build_examples=false rtc_use_h264=false symbol_level=0 enable_iterator_debugging=false"
+    call gn gen %OUTPUT_DIR% --root="src" ^
+      --args="is_debug=%%j target_cpu=\"%%i\" is_clang=true rtc_include_tests=false rtc_build_examples=false symbol_level=0 enable_iterator_debugging=false proprietary_codecs=true rtc_use_h264=true use_custom_libcxx=false use_custom_libcxx_for_host=false"
 
     rem build
-    ninja.exe -C %OUTPUT_DIR%
+    ninja -C %OUTPUT_DIR%
 
     set filename=
     if true==%%j (
@@ -63,23 +45,13 @@ for %%i in (x64) do (
 
 endlocal
 
-rem fix error when generate license
-patch -N "%cd%\src\tools_webrtc\libs\generate_licenses.py" < ^
-  "%COMMAND_DIR%\patches\generate_licenses.patch"
-
-rem generate license
-call python.bat "%cd%\src\tools_webrtc\libs\generate_licenses.py" ^
-  --target //:default %OUTPUT_DIR% %OUTPUT_DIR%
-
-rem unescape license
-powershell -File "%COMMAND_DIR%\Unescape.ps1" "%OUTPUT_DIR%\LICENSE.md"
 
 rem copy header
 xcopy src\*.h "%ARTIFACTS_DIR%\include" /C /S /I /F /H
 
-rem copy license
-copy "%OUTPUT_DIR%\LICENSE.md" "%ARTIFACTS_DIR%"
-
 rem create zip
 cd %ARTIFACTS_DIR%
-7z a -tzip webrtc-win.zip *
+7z a -tzip %WEBRTC_ZIP% *
+
+@REM rem upload to server
+@REM scp %WEBRTC_ZIP% ayamir@10.112.79.143:/home/ayamir/
