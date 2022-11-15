@@ -108,21 +108,21 @@ namespace webrtc
                 encoder = std::make_unique<SoftwareEncoder>(width, height, device, textureFormat);
                 break;
             }
-#endif            
+#endif
 #if SUPPORT_METAL
             case GRAPHICS_DEVICE_METAL: {
                 encoder = std::make_unique<SoftwareEncoder>(width, height, device, textureFormat);
                 break;
             }
-#endif            
+#endif
             default: {
                 throw std::invalid_argument("Invalid device to initialize NvEncoder");
                 break;
-            }           
+            }
         }
         encoder->InitV();
         return std::move(encoder);
     }
-    
+
 } // end namespace webrtc
 } // end namespace unity
