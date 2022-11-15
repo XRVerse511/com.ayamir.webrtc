@@ -250,7 +250,9 @@ void PluginUnload()
     s_clock.reset();
 }
 
-// Notice: When DebugLog is used in a method called from RenderingThread, 
+#define LG(...)       LogPrint("webrtc Log: UnityRenderEvent.cpp::" __VA_ARGS__)
+
+// Notice: When DebugLog is used in a method called from RenderingThread,
 // it hangs when attempting to leave PlayMode and re-enter PlayMode.
 // So, we comment out `DebugLog`.
 
@@ -275,6 +277,8 @@ static void UNITY_INTERFACE_API OnRenderEvent(int eventID, void* data)
         return;
     }
 
+    LG("OnRenderEvent: event=%d", event);
+
     switch(event)
     {
         case VideoStreamRenderEventID::Initialize:
@@ -282,6 +286,12 @@ static void UNITY_INTERFACE_API OnRenderEvent(int eventID, void* data)
             const VideoEncoderParameter* param = s_context->GetEncoderParameter(track);
             const UnityEncoderType encoderType = s_context->GetEncoderType();
             UnityVideoTrackSource* source = s_context->GetVideoSource(track);
+            if (source == nullptr) {
+                LG("OnRenderEvent: source is null");
+                return;
+            } else {
+                LG("OnRenderEvent: source is not null");
+            }
             UnityGfxRenderer gfxRenderer = GraphicsUtility::GetGfxRenderer();
             void* ptr = GraphicsUtility::TextureHandleToNativeGraphicsPtr(
                 param->textureHandle, s_gfxDevice.get(), gfxRenderer);
@@ -290,7 +300,10 @@ static void UNITY_INTERFACE_API OnRenderEvent(int eventID, void* data)
                 param->width, param->height, s_gfxDevice.get(), encoderType, param->textureFormat);
             if (!s_context->InitializeEncoder(s_mapEncoder[track].get(), track))
             {
-                // DebugLog("Encoder initialization faild.");
+                LG("OnRenderEvnet: Encoder initialization failed.");
+            } else
+            {
+                LG("OnRenderEvnet: Encoder initialization succeeded.");
             }
             return;
         }

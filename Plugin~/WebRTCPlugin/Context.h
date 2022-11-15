@@ -11,6 +11,8 @@
 
 using namespace ::webrtc;
 
+#define LG(...)       LogPrint("webrtc Log: Context.cpp::" __VA_ARGS__)
+
 namespace unity
 {
 namespace webrtc
@@ -24,7 +26,7 @@ namespace webrtc
     {
     public:
         static ContextManager* GetInstance() { return &s_instance; }
-     
+
         Context* GetContext(int uid) const;
         Context* CreateContext(int uid, UnityEncoderType encoderType, bool forTest);
         void DestroyContext(int uid);
@@ -57,7 +59,7 @@ namespace webrtc
     class Context : public IVideoEncoderObserver
     {
     public:
-        
+
         explicit Context(int uid = -1, UnityEncoderType encoderType = UnityEncoderHardware, bool forTest = false);
         ~Context();
 
@@ -94,7 +96,7 @@ namespace webrtc
         webrtc::AudioSourceInterface* CreateAudioSource();
 
         // Video Source
-        webrtc::VideoTrackSourceInterface* CreateVideoSource();
+        webrtc::VideoTrackSourceInterface* CreateVideoSource(short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset);
 
         // MediaStreamTrack
         webrtc::VideoTrackInterface* CreateVideoTrack(const std::string& label, webrtc::VideoTrackSourceInterface* source);
@@ -116,7 +118,7 @@ namespace webrtc
         // StatsReport
         void AddStatsReport(const rtc::scoped_refptr<const webrtc::RTCStatsReport>& report);
         void DeleteStatsReport(const webrtc::RTCStatsReport* report);
-    
+
         // DataChannel
         DataChannelObject* CreateDataChannel(PeerConnectionObject* obj, const char* label, const DataChannelInit& options);
         void AddDataChannel(std::unique_ptr<DataChannelObject> channel);

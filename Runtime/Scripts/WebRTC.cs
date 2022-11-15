@@ -438,7 +438,7 @@ namespace Unity.WebRTC
                 s_context = null;
             }
             s_syncContext = null;
-            NativeMethods.RegisterDebugLog(null);
+            NativeMethods.RegisterDebugLog(func: null);
 
 #if UNITY_EDITOR
             UnityEditor.AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload;
@@ -811,7 +811,7 @@ namespace Unity.WebRTC
         [DllImport(WebRTC.Lib)]
         public static extern IntPtr ContextCreateAudioTrackSource(IntPtr ptr);
         [DllImport(WebRTC.Lib)]
-        public static extern IntPtr ContextCreateVideoTrackSource(IntPtr ptr);
+        public static extern IntPtr ContextCreateVideoTrackSource(IntPtr ptr, short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset);
         [DllImport(WebRTC.Lib)]
         public static extern IntPtr ContextCreateVideoTrack(IntPtr ptr, [MarshalAs(UnmanagedType.LPStr, SizeConst = 256)] string label, IntPtr trackSource);
         [DllImport(WebRTC.Lib)]
@@ -1122,6 +1122,7 @@ namespace Unity.WebRTC
             Graphics.ExecuteCommandBuffer(_command);
             _command.Clear();
         }
+
         public static void FinalizeEncoder(IntPtr callback, IntPtr track)
         {
             _command.IssuePluginEventAndData(callback, (int)VideoStreamRenderEventId.Finalize, track);

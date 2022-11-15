@@ -18,12 +18,13 @@ namespace webrtc
 
     class IEncoder {
     public:
-        virtual ~IEncoder() {};        
-        virtual void InitV() = 0;   //Can throw exception. 
+        virtual ~IEncoder() {};
+        virtual void InitV() = 0;   //Can throw exception.
         virtual void SetRates(uint32_t bitRate, int64_t frameRate) = 0;
         virtual void UpdateSettings() = 0;
         virtual bool CopyBuffer(void* frame) = 0;
         virtual bool EncodeFrame(int64_t timestamp_us) = 0;
+        virtual bool EncodeFrame(int64_t timestamp_us, const absl::optional<webrtc::VideoFrame::ObjectRange> objectRange) = 0;
         virtual bool IsSupported() const = 0;
         virtual void SetIdrFrame() = 0;
         virtual uint64 GetCurrentFrameCount() const = 0;
@@ -38,6 +39,6 @@ namespace webrtc
         CodecInitializationResult m_initializationResult = CodecInitializationResult::NotInitialized;
         uint32_t m_encoderId;
     };
-    
+
 } // end namespace webrtc
 } // end namespace unity

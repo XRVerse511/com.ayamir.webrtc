@@ -31,6 +31,8 @@ class UnityVideoTrackSource :
 
     UnityVideoTrackSource(
         bool is_screencast, absl::optional<bool> needs_denoising);
+    UnityVideoTrackSource(
+        bool is_screencast, absl::optional<bool> needs_denoising, const absl::optional<webrtc::VideoFrame::ObjectRange>& object_range);
     ~UnityVideoTrackSource() override;
 
     SourceState state() const override;
@@ -38,6 +40,7 @@ class UnityVideoTrackSource :
     bool remote() const override;
     bool is_screencast() const override;
     absl::optional<bool> needs_denoising() const override;
+    absl::optional<webrtc::VideoFrame::ObjectRange> object_range() const;
 
     // note:: call from render thread
     void Init(void* frame);
@@ -81,6 +84,7 @@ class UnityVideoTrackSource :
     IEncoder* encoder_;
     void* frame_;
     webrtc::Clock* clock_;
+    absl::optional<webrtc::VideoFrame::ObjectRange> object_range_;
 };
 
 } // end namespace webrtc

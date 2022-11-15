@@ -8,7 +8,7 @@ namespace unity
 {
 namespace webrtc
 {
-    
+
     class IGraphicsDevice;
     class ITexture2D;
     class SoftwareEncoder : public IEncoder
@@ -21,6 +21,8 @@ namespace webrtc
         void UpdateSettings() override {}
         bool CopyBuffer(void* frame) override;
         bool EncodeFrame(int64_t timestamp_us) override;
+        // NOTE: use EncodeFrame dynamic dispatch version to encode with object range;
+        bool EncodeFrame(int64_t timestamp_us, const absl::optional<webrtc::VideoFrame::ObjectRange> objectRange) override;
         bool IsSupported() const override { return true; }
         void SetIdrFrame() override {}
         uint64 GetCurrentFrameCount() const override { return m_frameCount; }
@@ -34,6 +36,6 @@ namespace webrtc
         uint64 m_frameCount = 0;
     };
 //---------------------------------------------------------------------------------------------------------------------
-    
+
 } //end namespace webrtc
 } //end namespace unity

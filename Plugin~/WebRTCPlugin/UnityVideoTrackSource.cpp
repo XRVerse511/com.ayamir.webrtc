@@ -21,6 +21,20 @@ UnityVideoTrackSource::UnityVideoTrackSource(
 //  DETACH_FROM_THREAD(thread_checker_);
 }
 
+UnityVideoTrackSource::UnityVideoTrackSource(
+    bool is_screencast,
+    absl::optional<bool> needs_denoising,
+    const absl::optional<webrtc::VideoFrame::ObjectRange>& object_range) :
+    AdaptedVideoTrackSource(/*required_alignment=*/1),
+    is_screencast_(is_screencast),
+    needs_denoising_(needs_denoising),
+    object_range_(object_range),
+    encoder_(nullptr)
+{
+    DebugLog("Init with object_range succeed.");
+//  DETACH_FROM_THREAD(thread_checker_);
+}
+
 UnityVideoTrackSource::~UnityVideoTrackSource()
 {
     {
@@ -50,6 +64,11 @@ bool UnityVideoTrackSource::is_screencast() const {
 absl::optional<bool> UnityVideoTrackSource::needs_denoising() const
 {
     return needs_denoising_;
+}
+
+absl::optional<webrtc::VideoFrame::ObjectRange> UnityVideoTrackSource::object_range() const
+{
+    return object_range_;
 }
 
 CodecInitializationResult UnityVideoTrackSource::GetCodecInitializationResult() const
@@ -88,7 +107,7 @@ void UnityVideoTrackSource::OnFrameCaptured(int64_t timestamp_us)
         LogPrint("Copy texture buffer is failed");
         return;
     }
-    if (!encoder_->EncodeFrame(timestamp_us))
+    if (!encoder_->EncodeFrame(timestamp_us, object_range()))
     {
         LogPrint("Encode frame is failed");
         return;
