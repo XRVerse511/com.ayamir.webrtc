@@ -6,6 +6,47 @@ using UnityEngine.Experimental.Rendering;
 
 namespace Unity.WebRTC
 {
+    public class ObjectRange
+    {
+        public short iXStart { get; set; }
+        public short iXEnd { get; set; }
+        public short iYStart { get; set; }
+        public short iYEnd { get; set; }
+        public int iQpOffset { get; set; }
+
+        public ObjectRange()
+        {
+            iXStart = 0;
+            iXEnd = 0;
+            iYStart = 0;
+            iYEnd = 0;
+            iQpOffset = 0;
+        }
+
+        public ObjectRange(short xStart, short xEnd, short yStart, short yEnd, int qpOffset)
+        {
+            iXStart = xStart;
+            iXEnd = xEnd;
+            iYStart = yStart;
+            iYEnd = yEnd;
+            iQpOffset = qpOffset;
+        }
+
+        public void SetFromObjectRange(ObjectRange objectRange)
+        {
+            iXStart = objectRange.iXStart;
+            iXEnd = objectRange.iXEnd;
+            iYStart = objectRange.iYStart;
+            iYEnd = objectRange.iYEnd;
+            iQpOffset = objectRange.iQpOffset;
+        }
+
+        public void Display()
+        {
+            Debug.Log("ObjectRange: " + iXStart + " " + iXEnd + " " + iYStart + " " + iYEnd + " " + iQpOffset);
+        }
+    }
+
     public class VideoStreamTrack : MediaStreamTrack
     {
         internal static ConcurrentDictionary<IntPtr, WeakReference<VideoStreamTrack>> s_tracks =
@@ -17,6 +58,8 @@ namespace Unity.WebRTC
 
         UnityVideoRenderer m_renderer;
         VideoTrackSource _source;
+
+        ObjectRange m_objectRange = new ObjectRange();
 
         private static RenderTexture CreateRenderTexture(int width, int height)
         {
@@ -32,6 +75,15 @@ namespace Unity.WebRTC
             m_needFlip = true;
             m_sourceTexture = source;
             m_destTexture = dest;
+        }
+
+        internal VideoStreamTrack(Texture source, RenderTexture dest, int width, int height, ObjectRange objectRange)
+            : this(dest.GetNativeTexturePtr(), width, height, source.graphicsFormat, objectRange)
+        {
+            m_needFlip = true;
+            m_sourceTexture = source;
+            m_destTexture = dest;
+            m_objectRange.SetFromObjectRange(objectRange);
         }
 
         /// <summary>
@@ -118,18 +170,20 @@ namespace Unity.WebRTC
         {
         }
 
-
         /// <summary>
         /// Creates a new VideoStream object.
-        /// The track is created with a source texture `ptr`.
-        /// It is noted that streamed video might be flipped when not action was taken. Almost case it has no problem to use other constructor instead.
-        ///
-        /// See Also: Texture.GetNativeTexturePtr
+        /// The track is created with a `source`.
         /// </summary>
-        /// <param name="texturePtr"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="format"></param>
+        /// <param name="source"></param>
+        /// <param name="objectRange"></param>
+        public VideoStreamTrack(Texture source, ObjectRange objectRange)
+            : this(source,
+                CreateRenderTexture(source.width, source.height),
+                source.width,
+                source.height,
+                objectRange)
+        {
+        }
         public VideoStreamTrack(IntPtr texturePtr, int width, int height, GraphicsFormat format)
             : this(Guid.NewGuid().ToString(), new VideoTrackSource())
         {
@@ -138,6 +192,17 @@ namespace Unity.WebRTC
             WebRTC.Context.SetVideoEncoderParameter(GetSelfOrThrow(), width, height, format, texturePtr);
             WebRTC.Context.InitializeEncoder(GetSelfOrThrow());
         }
+
+        public VideoStreamTrack(IntPtr texturePtr, int width, int height, GraphicsFormat format, ObjectRange objectRange)
+            : this(Guid.NewGuid().ToString(), new VideoTrackSource(objectRange))
+        {
+            WebRTC.ValidateTextureSize(width, height, Application.platform, WebRTC.GetEncoderType());
+            WebRTC.ValidateGraphicsFormat(format);
+            WebRTC.Context.SetVideoEncoderParameter(GetSelfOrThrow(), width, height, format, texturePtr);
+            WebRTC.Context.InitializeEncoder(GetSelfOrThrow());
+            Debug.Log("InitializeEncoder with objectRange succeed.");
+        }
+
 
         internal VideoStreamTrack(string label, VideoTrackSource source)
             : this(WebRTC.Context.CreateVideoTrack(label, source.self))
@@ -227,7 +292,12 @@ namespace Unity.WebRTC
 
     internal class VideoTrackSource : RefCountedObject
     {
-        public VideoTrackSource() : base(WebRTC.Context.CreateVideoTrackSource())
+        public VideoTrackSource() : base(WebRTC.Context.CreateVideoTrackSource(0, 0, 0, 0, 0))
+        {
+            WebRTC.Table.Add(self, this);
+        }
+
+        public VideoTrackSource(ObjectRange objectRange) : base(WebRTC.Context.CreateVideoTrackSource(objectRange.iXStart, objectRange.iXEnd, objectRange.iYStart, objectRange.iYEnd, objectRange.iQpOffset))
         {
             WebRTC.Table.Add(self, this);
         }
