@@ -220,7 +220,6 @@ namespace Unity.WebRTC
 
         public IntPtr CreateVideoTrackSource(short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset)
         {
-            Debug.Log("Pass object range parts to ContextCreateVideoTrackSource");
             return NativeMethods.ContextCreateVideoTrackSource(self, iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
         }
 

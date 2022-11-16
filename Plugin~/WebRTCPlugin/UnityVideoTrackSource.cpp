@@ -31,7 +31,6 @@ UnityVideoTrackSource::UnityVideoTrackSource(
     object_range_(object_range),
     encoder_(nullptr)
 {
-    DebugLog("Init with object_range succeed.");
 //  DETACH_FROM_THREAD(thread_checker_);
 }
 

@@ -200,7 +200,6 @@ namespace Unity.WebRTC
             WebRTC.ValidateGraphicsFormat(format);
             WebRTC.Context.SetVideoEncoderParameter(GetSelfOrThrow(), width, height, format, texturePtr);
             WebRTC.Context.InitializeEncoder(GetSelfOrThrow());
-            Debug.Log("InitializeEncoder with objectRange succeed.");
         }
 
 

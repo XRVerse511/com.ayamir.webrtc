@@ -277,8 +277,6 @@ static void UNITY_INTERFACE_API OnRenderEvent(int eventID, void* data)
         return;
     }
 
-    LG("OnRenderEvent: event=%d", event);
-
     switch(event)
     {
         case VideoStreamRenderEventID::Initialize:
@@ -289,8 +287,6 @@ static void UNITY_INTERFACE_API OnRenderEvent(int eventID, void* data)
             if (source == nullptr) {
                 LG("OnRenderEvent: source is null");
                 return;
-            } else {
-                LG("OnRenderEvent: source is not null");
             }
             UnityGfxRenderer gfxRenderer = GraphicsUtility::GetGfxRenderer();
             void* ptr = GraphicsUtility::TextureHandleToNativeGraphicsPtr(
@@ -300,10 +296,7 @@ static void UNITY_INTERFACE_API OnRenderEvent(int eventID, void* data)
                 param->width, param->height, s_gfxDevice.get(), encoderType, param->textureFormat);
             if (!s_context->InitializeEncoder(s_mapEncoder[track].get(), track))
             {
-                LG("OnRenderEvnet: Encoder initialization failed.");
-            } else
-            {
-                LG("OnRenderEvnet: Encoder initialization succeeded.");
+                // LG("OnRenderEvnet: Encoder initialization failed.");
             }
             return;
         }

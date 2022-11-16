@@ -272,7 +272,6 @@ namespace webrtc
             RTC_LOG(LS_INFO) << "source is not found";
             return nullptr;
         }
-        LG("GetVideoSource: source founded");
         return static_cast<UnityVideoTrackSource*>(source);
     }
 
@@ -371,11 +370,9 @@ namespace webrtc
     VideoTrackSourceInterface* Context::CreateVideoSource(short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset)
     {
         auto objectRange = absl::make_optional<webrtc::VideoFrame::ObjectRange>(iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
-        DebugLog("CreateVideoSource: objectRange.iXStart=%d, objectRange.iXEnd=%d, objectRange.iYStart=%d, objectRange.iYEnd=%d, iQpOffset=%d", objectRange->iXStart, objectRange->iXEnd, objectRange->iYStart, objectRange->iYEnd, objectRange->iQpOffset);
         rtc::scoped_refptr<UnityVideoTrackSource> source =
             new rtc::RefCountedObject<UnityVideoTrackSource>(false, absl::nullopt, objectRange);
         AddRefPtr(source);
-        DebugLog("AddRefPtr: source=%p", source.get());
         return source;
     }
 
