@@ -287,6 +287,11 @@ extern "C"
         return context->CreateVideoSource(iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
     }
 
+    UNITY_INTERFACE_EXPORT void ContextSetObjectRangeForVideoTrackSource(Context* context, webrtc::VideoTrackSourceInterface* source, short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset)
+    {
+        context->SetObjectRangeForVideoTrackSource(source, iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
+    }
+
     UNITY_INTERFACE_EXPORT webrtc::AudioSourceInterface* ContextCreateAudioTrackSource(Context* context)
     {
         return context->CreateAudioSource();

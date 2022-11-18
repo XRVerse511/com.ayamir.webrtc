@@ -70,6 +70,11 @@ absl::optional<webrtc::VideoFrame::ObjectRange> UnityVideoTrackSource::object_ra
     return object_range_;
 }
 
+void UnityVideoTrackSource::SetObjectRange(short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset)
+{
+    object_range_ = webrtc::VideoFrame::ObjectRange(iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
+}
+
 CodecInitializationResult UnityVideoTrackSource::GetCodecInitializationResult() const
 {
     if (encoder_ == nullptr)

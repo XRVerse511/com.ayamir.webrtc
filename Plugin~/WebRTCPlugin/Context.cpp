@@ -376,6 +376,11 @@ namespace webrtc
         return source;
     }
 
+    void Context::SetObjectRangeForVideoTrackSource(VideoTrackSourceInterface* source, short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset)
+    {
+        static_cast<UnityVideoTrackSource*>(source)->SetObjectRange(iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
+    }
+
     webrtc::VideoTrackInterface* Context::CreateVideoTrack(
         const std::string& label, VideoTrackSourceInterface* source)
     {

@@ -59,6 +59,8 @@ class UnityVideoTrackSource :
     using ::webrtc::VideoTrackSourceInterface::AddOrUpdateSink;
     using ::webrtc::VideoTrackSourceInterface::RemoveSink;
 
+    void SetObjectRange(short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset);
+
  private:
     FrameAdaptationParams ComputeAdaptationParams(
         int width, int height, int64_t time_us);
