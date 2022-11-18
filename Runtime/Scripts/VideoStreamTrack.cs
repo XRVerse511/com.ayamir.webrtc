@@ -40,6 +40,23 @@ namespace Unity.WebRTC
             iYEnd = objectRange.iYEnd;
             iQpOffset = objectRange.iQpOffset;
         }
+        public void Set(short xStart, short xEnd, short yStart, short yEnd, int qpOffset)
+        {
+            iXStart = xStart;
+            iXEnd = xEnd;
+            iYStart = yStart;
+            iYEnd = yEnd;
+            iQpOffset = qpOffset;
+        }
+
+        public void Reset()
+        {
+            iXStart = 0;
+            iXEnd = 0;
+            iYStart = 0;
+            iYEnd = 0;
+            iQpOffset = 0;
+        }
 
         public void Display()
         {
@@ -306,6 +323,11 @@ namespace Unity.WebRTC
             this.Dispose();
         }
 
+        public void SetObjectRange(ObjectRange objectRange)
+        {
+            WebRTC.Context.SetObjectRangeForVideoTrackSource(GetSelfOrThrow(), objectRange.iXStart, objectRange.iXEnd, objectRange.iYStart, objectRange.iYEnd, objectRange.iQpOffset);
+        }
+
         public override void Dispose()
         {
             if (this.disposed)
@@ -318,6 +340,15 @@ namespace Unity.WebRTC
                 WebRTC.Table.Remove(self);
             }
             base.Dispose();
+        }
+
+        internal IntPtr GetSelfOrThrow()
+        {
+            if (self == IntPtr.Zero)
+            {
+                throw new InvalidOperationException("This instance has been disposed.");
+            }
+            return self;
         }
     }
 

@@ -813,6 +813,8 @@ namespace Unity.WebRTC
         [DllImport(WebRTC.Lib)]
         public static extern IntPtr ContextCreateVideoTrackSource(IntPtr ptr, short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset);
         [DllImport(WebRTC.Lib)]
+        public static extern void ContextSetObjectRangeForVideoTrackSource(IntPtr ptr, IntPtr videoTrackSourcePtr, short xStart, short xEnd, short yStart, short yEnd, int iQpOffset);
+        [DllImport(WebRTC.Lib)]
         public static extern IntPtr ContextCreateVideoTrack(IntPtr ptr, [MarshalAs(UnmanagedType.LPStr, SizeConst = 256)] string label, IntPtr trackSource);
         [DllImport(WebRTC.Lib)]
         public static extern IntPtr ContextCreateAudioTrack(IntPtr ptr, [MarshalAs(UnmanagedType.LPStr, SizeConst = 256)] string label, IntPtr trackSource);

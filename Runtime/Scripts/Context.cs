@@ -223,6 +223,11 @@ namespace Unity.WebRTC
             return NativeMethods.ContextCreateVideoTrackSource(self, iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
         }
 
+        public void SetObjectRangeForVideoTrackSource(IntPtr videoTrackSourcePtr, short xStart, short xEnd, short yStart, short yEnd, int qpOffset)
+        {
+            NativeMethods.ContextSetObjectRangeForVideoTrackSource(self, videoTrackSourcePtr, xStart, xEnd, yStart, yEnd, qpOffset);
+        }
+
         public IntPtr CreateAudioTrackSource()
         {
             return NativeMethods.ContextCreateAudioTrackSource(self);
