@@ -129,6 +129,14 @@ namespace Unity.WebRTC
         /// </summary>
         public Texture Texture => m_destTexture;
 
+        public void SetSourceObjectRange(ObjectRange objectRange)
+        {
+            if (_source != null)
+            {
+                _source.SetObjectRange(objectRange);
+            }
+        }
+
         public Texture InitializeReceiver(int width, int height)
         {
             if (IsDecoderInitialized)
