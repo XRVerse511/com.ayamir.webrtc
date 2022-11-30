@@ -23,12 +23,12 @@ namespace Unity.WebRTC
             iQpOffset = 0;
         }
 
-        public ObjectRange(short xStart, short xEnd, short yStart, short yEnd, int qpOffset)
+        public ObjectRange(int xStart, int xEnd, int yStart, int yEnd, int qpOffset)
         {
-            iXStart = xStart;
-            iXEnd = xEnd;
-            iYStart = yStart;
-            iYEnd = yEnd;
+            iXStart = (short)(xStart / 16);
+            iXEnd = (short)(xEnd / 16);
+            iYStart = (short)(yStart / 16);
+            iYEnd = (short)(yEnd / 16);
             iQpOffset = qpOffset;
         }
 
@@ -40,12 +40,12 @@ namespace Unity.WebRTC
             iYEnd = objectRange.iYEnd;
             iQpOffset = objectRange.iQpOffset;
         }
-        public void Set(short xStart, short xEnd, short yStart, short yEnd, int qpOffset)
+        public void Set(int xStart, int xEnd, int yStart, int yEnd, int qpOffset)
         {
-            iXStart = xStart;
-            iXEnd = xEnd;
-            iYStart = yStart;
-            iYEnd = yEnd;
+            iXStart = (short)(xStart / 16);
+            iXEnd = (short)(xEnd / 16);
+            iYStart = (short)(yStart / 16);
+            iYEnd = (short)(yEnd / 16);
             iQpOffset = qpOffset;
         }
 
@@ -209,6 +209,7 @@ namespace Unity.WebRTC
                 objectRange)
         {
         }
+
         public VideoStreamTrack(IntPtr texturePtr, int width, int height, GraphicsFormat format)
             : this(Guid.NewGuid().ToString(), new VideoTrackSource())
         {
@@ -226,7 +227,6 @@ namespace Unity.WebRTC
             WebRTC.Context.SetVideoEncoderParameter(GetSelfOrThrow(), width, height, format, texturePtr);
             WebRTC.Context.InitializeEncoder(GetSelfOrThrow());
         }
-
 
         internal VideoStreamTrack(string label, VideoTrackSource source)
             : this(WebRTC.Context.CreateVideoTrack(label, source.self))
