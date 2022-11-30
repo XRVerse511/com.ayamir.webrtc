@@ -62,8 +62,8 @@ namespace webrtc
 
     bool SoftwareEncoder::EncodeFrame(int64_t timestamp_us, const absl::optional<webrtc::VideoFrame::ObjectRange> objectRange)
     {
-        LG("EncodeFrame: before frame build: objectRange: %d, %d, %d, %d, %d",
-            objectRange->iXStart, objectRange->iXEnd, objectRange->iYStart, objectRange->iYEnd, objectRange->iQpOffset);
+        // LG("EncodeFrame: before frame build: objectRange: %d, %d, %d, %d, %d",
+        //     objectRange->iXStart, objectRange->iXEnd, objectRange->iYStart, objectRange->iYEnd, objectRange->iQpOffset);
 
         const rtc::scoped_refptr<webrtc::I420Buffer> i420Buffer = m_device->ConvertRGBToI420(m_encodeTex);
         if (nullptr == i420Buffer)
@@ -77,8 +77,8 @@ namespace webrtc
             .set_object_range(objectRange)
             .build();
 
-        LG("EncodeFrame: after frame build: objectRange: %d, %d, %d, %d, %d",
-            frame.object_range().iXStart, frame.object_range().iXEnd, frame.object_range().iYStart, frame.object_range().iYEnd, frame.object_range().iQpOffset);
+        // LG("EncodeFrame: after frame build: objectRange: %d, %d, %d, %d, %d",
+        //     frame.object_range().iXStart, frame.object_range().iXEnd, frame.object_range().iYStart, frame.object_range().iYEnd, frame.object_range().iQpOffset);
 
         CaptureFrame(frame);
         m_frameCount++;
