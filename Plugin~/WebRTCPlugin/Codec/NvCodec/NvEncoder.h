@@ -53,6 +53,7 @@ namespace webrtc
         bool CopyBuffer(void* frame) override;
         bool EncodeFrame(int64_t timestamp_us) override;
         bool EncodeFrame(int64_t timestamp_us, const absl::optional<webrtc::VideoFrame::ObjectRange> objectRange) override;
+        bool EncodeFrame(int64_t timestamp_us, int* priorityArray) override;
         bool IsSupported() const override { return m_isNvEncoderSupported; }
         void SetIdrFrame()  override { isIdrFrame = true; }
         uint64 GetCurrentFrameCount() const override { return frameCount; }

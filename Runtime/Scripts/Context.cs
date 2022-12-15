@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using System.Runtime.InteropServices;
 using UnityEngine.Experimental.Rendering;
 
 namespace Unity.WebRTC
@@ -226,6 +227,11 @@ namespace Unity.WebRTC
         public void SetObjectRangeForVideoTrackSource(IntPtr videoTrackSourcePtr, short xStart, short xEnd, short yStart, short yEnd, int qpOffset)
         {
             NativeMethods.ContextSetObjectRangeForVideoTrackSource(self, videoTrackSourcePtr, xStart, xEnd, yStart, yEnd, qpOffset);
+        }
+
+        public void SetPriorityArrayForVideoTrackSource(IntPtr videoTrackSourcePtr, ref int[] myColors)
+        {
+            NativeMethods.ContextSetPriorityArrayForVideoTrackSource(self, videoTrackSourcePtr, myColors);
         }
 
         public IntPtr CreateAudioTrackSource()

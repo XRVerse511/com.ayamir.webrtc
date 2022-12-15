@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 
@@ -62,6 +63,19 @@ namespace Unity.WebRTC
         {
             Debug.Log("ObjectRange: " + iXStart + " " + iXEnd + " " + iYStart + " " + iYEnd + " " + iQpOffset);
         }
+    }
+
+    [StructLayout(LayoutKind.Explicit, CharSet = CharSet.Unicode)]
+    public struct MyColor
+    {
+        [MarshalAs(UnmanagedType.I4)]
+        [FieldOffset(0)] public int r;
+        [MarshalAs(UnmanagedType.I4)]
+        [FieldOffset(4)] public int g;
+        [MarshalAs(UnmanagedType.I4)]
+        [FieldOffset(8)] public int b;
+        [MarshalAs(UnmanagedType.I4)]
+        [FieldOffset(12)] public int a;
     }
 
     public class VideoStreamTrack : MediaStreamTrack
@@ -134,6 +148,14 @@ namespace Unity.WebRTC
             if (_source != null)
             {
                 _source.SetObjectRange(objectRange);
+            }
+        }
+
+        public void SetSourcePriorityArray(ref int[] myColors)
+        {
+            if (_source != null)
+            {
+                _source.SetPriorityArray(ref myColors);
             }
         }
 
@@ -334,6 +356,11 @@ namespace Unity.WebRTC
         public void SetObjectRange(ObjectRange objectRange)
         {
             WebRTC.Context.SetObjectRangeForVideoTrackSource(GetSelfOrThrow(), objectRange.iXStart, objectRange.iXEnd, objectRange.iYStart, objectRange.iYEnd, objectRange.iQpOffset);
+        }
+
+        public void SetPriorityArray(ref int[] myColors)
+        {
+            WebRTC.Context.SetPriorityArrayForVideoTrackSource(GetSelfOrThrow(), ref myColors);
         }
 
         public override void Dispose()

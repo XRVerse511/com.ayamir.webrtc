@@ -12,78 +12,98 @@
 
 namespace unity
 {
-namespace webrtc
-{
-
-    SoftwareEncoder::SoftwareEncoder(int width, int height, IGraphicsDevice* device, UnityRenderingExtTextureFormat textureFormat) :
-    m_device(device),
-    m_width(width),
-    m_height(height),
-    m_encodeTex(nullptr),
-    m_textureFormat(textureFormat)
+    namespace webrtc
     {
-    }
 
-    SoftwareEncoder::~SoftwareEncoder()
-    {
-        delete m_encodeTex;
-        m_encodeTex = nullptr;
-    }
+        SoftwareEncoder::SoftwareEncoder(int width, int height, IGraphicsDevice* device, UnityRenderingExtTextureFormat textureFormat) :
+            m_device(device),
+            m_width(width),
+            m_height(height),
+            m_encodeTex(nullptr),
+            m_textureFormat(textureFormat)
+        {
+        }
 
-    void SoftwareEncoder::InitV()
-    {
-        m_encodeTex = m_device->CreateCPUReadTextureV(m_width, m_height, m_textureFormat);
-        m_initializationResult = CodecInitializationResult::Success;
-    }
+        SoftwareEncoder::~SoftwareEncoder()
+        {
+            delete m_encodeTex;
+            m_encodeTex = nullptr;
+        }
 
-    bool SoftwareEncoder::CopyBuffer(void* frame)
-    {
-        m_device->CopyResourceFromNativeV(m_encodeTex, frame);
-        return true;
-    }
+        void SoftwareEncoder::InitV()
+        {
+            m_encodeTex = m_device->CreateCPUReadTextureV(m_width, m_height, m_textureFormat);
+            m_initializationResult = CodecInitializationResult::Success;
+        }
 
-    bool SoftwareEncoder::EncodeFrame(int64_t timestamp_us)
-    {
-        const rtc::scoped_refptr<webrtc::I420Buffer> i420Buffer = m_device->ConvertRGBToI420(m_encodeTex);
-        if (nullptr == i420Buffer)
-            return false;
+        bool SoftwareEncoder::CopyBuffer(void* frame)
+        {
+            m_device->CopyResourceFromNativeV(m_encodeTex, frame);
+            return true;
+        }
 
-        webrtc::VideoFrame frame =
-            webrtc::VideoFrame::Builder()
-            .set_video_frame_buffer(i420Buffer)
-            .set_rotation(webrtc::kVideoRotation_0)
-            .set_timestamp_us(timestamp_us)
-            .build();
+        bool SoftwareEncoder::EncodeFrame(int64_t timestamp_us)
+        {
+            const rtc::scoped_refptr<webrtc::I420Buffer> i420Buffer = m_device->ConvertRGBToI420(m_encodeTex);
+            if (nullptr == i420Buffer)
+                return false;
 
-        CaptureFrame(frame);
-        m_frameCount++;
-        return true;
-    }
+            webrtc::VideoFrame frame =
+                webrtc::VideoFrame::Builder()
+                .set_video_frame_buffer(i420Buffer)
+                .set_rotation(webrtc::kVideoRotation_0)
+                .set_timestamp_us(timestamp_us)
+                .build();
 
-    bool SoftwareEncoder::EncodeFrame(int64_t timestamp_us, const absl::optional<webrtc::VideoFrame::ObjectRange> objectRange)
-    {
-        // LG("EncodeFrame: before frame build: objectRange: %d, %d, %d, %d, %d",
-        //     objectRange->iXStart, objectRange->iXEnd, objectRange->iYStart, objectRange->iYEnd, objectRange->iQpOffset);
+            CaptureFrame(frame);
+            m_frameCount++;
+            return true;
+        }
 
-        const rtc::scoped_refptr<webrtc::I420Buffer> i420Buffer = m_device->ConvertRGBToI420(m_encodeTex);
-        if (nullptr == i420Buffer)
-            return false;
+        bool SoftwareEncoder::EncodeFrame(int64_t timestamp_us, const absl::optional<webrtc::VideoFrame::ObjectRange> objectRange)
+        {
+            // LG("EncodeFrame: before frame build: objectRange: %d, %d, %d, %d, %d",
+            //     objectRange->iXStart, objectRange->iXEnd, objectRange->iYStart, objectRange->iYEnd, objectRange->iQpOffset);
 
-        webrtc::VideoFrame frame =
-            webrtc::VideoFrame::Builder()
-            .set_video_frame_buffer(i420Buffer)
-            .set_rotation(webrtc::kVideoRotation_0)
-            .set_timestamp_us(timestamp_us)
-            .set_object_range(objectRange)
-            .build();
+            const rtc::scoped_refptr<webrtc::I420Buffer> i420Buffer = m_device->ConvertRGBToI420(m_encodeTex);
+            if (nullptr == i420Buffer)
+                return false;
 
-        // LG("EncodeFrame: after frame build: objectRange: %d, %d, %d, %d, %d",
-        //     frame.object_range().iXStart, frame.object_range().iXEnd, frame.object_range().iYStart, frame.object_range().iYEnd, frame.object_range().iQpOffset);
+            webrtc::VideoFrame frame =
+                webrtc::VideoFrame::Builder()
+                .set_video_frame_buffer(i420Buffer)
+                .set_rotation(webrtc::kVideoRotation_0)
+                .set_timestamp_us(timestamp_us)
+                .set_object_range(objectRange)
+                .build();
 
-        CaptureFrame(frame);
-        m_frameCount++;
-        return true;
-    }
+            // LG("EncodeFrame: after frame build: objectRange: %d, %d, %d, %d, %d",
+            //     frame.object_range().iXStart, frame.object_range().iXEnd, frame.object_range().iYStart, frame.object_range().iYEnd, frame.object_range().iQpOffset);
 
-} // end namespace webrtc
+            CaptureFrame(frame);
+            m_frameCount++;
+            return true;
+        }
+
+        bool SoftwareEncoder::EncodeFrame(int64_t timestamp_us, int* priorityArray)
+        {
+            // LG("EncodeFrame: before frame build: priorityArray: %p", priorityArray);
+
+            const rtc::scoped_refptr<webrtc::I420Buffer> i420Buffer = m_device->ConvertRGBToI420(m_encodeTex);
+            if (nullptr == i420Buffer)
+                return false;
+
+            webrtc::VideoFrame frame =
+                webrtc::VideoFrame::Builder()
+                .set_video_frame_buffer(i420Buffer)
+                .set_rotation(webrtc::kVideoRotation_0)
+                .set_timestamp_us(timestamp_us)
+                .set_priority_array(priorityArray)
+                .build();
+
+            CaptureFrame(frame);
+            m_frameCount++;
+            return true;
+        }
+    } // end namespace webrtc
 } // end namespace unity

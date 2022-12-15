@@ -339,6 +339,37 @@ namespace webrtc
         return true;
     }
 
+    //entry for encoding a frame
+    bool NvEncoder::EncodeFrame(int64_t timestamp_us, int* priorityArray)
+    {
+        UpdateSettings();
+        uint32 bufferIndexToWrite = frameCount % bufferedFrameNum;
+        Frame& frame = bufferedFrames[bufferIndexToWrite];
+#pragma region configure per-frame encode parameters
+        NV_ENC_PIC_PARAMS picParams = { 0 };
+        picParams.version = NV_ENC_PIC_PARAMS_VER;
+        picParams.pictureStruct = NV_ENC_PIC_STRUCT_FRAME;
+        picParams.inputBuffer = frame.inputFrame.mappedResource;
+        picParams.bufferFmt = frame.inputFrame.bufferFormat;
+        picParams.inputWidth = nvEncInitializeParams.encodeWidth;
+        picParams.inputHeight = nvEncInitializeParams.encodeHeight;
+        picParams.outputBitstream = frame.outputFrame;
+        picParams.inputTimeStamp = frameCount;
+#pragma endregion
+#pragma region start encoding
+        if (isIdrFrame)
+        {
+            picParams.encodePicFlags = NV_ENC_PIC_FLAG_FORCEIDR | NV_ENC_PIC_FLAG_FORCEINTRA;
+            isIdrFrame = false;
+        }
+        errorCode = pNvEncodeAPI->nvEncEncodePicture(pEncoderInterface, &picParams);
+        checkf(NV_RESULT(errorCode), StringFormat("Failed to encode frame, error is %d", errorCode).c_str());
+#pragma endregion
+        ProcessEncodedFrame(frame, timestamp_us);
+        frameCount++;
+        return true;
+    }
+
     //get encoded frame
     void NvEncoder::ProcessEncodedFrame(Frame& frame, int64_t timestamp_us)
     {

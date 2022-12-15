@@ -292,6 +292,11 @@ extern "C"
         context->SetObjectRangeForVideoTrackSource(source, iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
     }
 
+    UNITY_INTERFACE_EXPORT void ContextSetPriorityArrayForVideoTrackSource(Context* context, webrtc::VideoTrackSourceInterface* source, int* priorityArray)
+    {
+        context->SetPriorityArrayForVideoTrackSource(source, priorityArray);
+    }
+
     UNITY_INTERFACE_EXPORT webrtc::AudioSourceInterface* ContextCreateAudioTrackSource(Context* context)
     {
         return context->CreateAudioSource();
