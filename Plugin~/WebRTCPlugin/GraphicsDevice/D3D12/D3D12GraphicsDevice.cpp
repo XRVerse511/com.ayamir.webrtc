@@ -134,7 +134,7 @@ bool D3D12GraphicsDevice::CopyResourceFromNativeV(ITexture2D* baseDest, void* na
         ts.Type = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
         ts.SubresourceIndex = 0;
         m_commandList->CopyTextureRegion(&td, 0, 0, 0, &ts, nullptr);
-        Barrier(nativeDest,D3D12_RESOURCE_STATE_COPY_SOURCE,D3D12_RESOURCE_STATE_COPY_DEST);        
+        Barrier(nativeDest,D3D12_RESOURCE_STATE_COPY_SOURCE,D3D12_RESOURCE_STATE_COPY_DEST);
     }
 
     ThrowIfFailed(m_commandList->Close());
@@ -178,7 +178,7 @@ D3D12Texture2D* D3D12GraphicsDevice::CreateSharedD3D12Texture(uint32_t w, uint32
         nullptr, IID_PPV_ARGS(&nativeTex)));
 
     ID3D11Texture2D* sharedTex = nullptr;
-    HANDLE handle = nullptr;   
+    HANDLE handle = nullptr;
     ThrowIfFailed(m_d3d12Device->CreateSharedHandle(nativeTex, nullptr, GENERIC_ALL, nullptr, &handle));
 
     //ID3D11Device::OpenSharedHandle() doesn't accept handles created by d3d12. OpenSharedHandle1() is needed.
@@ -192,7 +192,7 @@ void D3D12GraphicsDevice::WaitForFence(ID3D12Fence* fence, HANDLE handle, uint64
     ThrowIfFailed(m_d3d12CommandQueue->Signal(fence, *fenceValue));
     ThrowIfFailed(fence->SetEventOnCompletion(*fenceValue, handle));
     WaitForSingleObject(handle, INFINITE);
-    ++(*fenceValue);       
+    ++(*fenceValue);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -209,7 +209,7 @@ void D3D12GraphicsDevice::Barrier(ID3D12Resource* res,
     barrier.Transition.StateAfter = stateAfter;
     barrier.Transition.Subresource = subresource;
     m_commandList->ResourceBarrier(1, &barrier);
-    
+
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -257,7 +257,7 @@ rtc::scoped_refptr<webrtc::I420Buffer> D3D12GraphicsDevice::ConvertRGBToI420(ITe
     D3D12_RANGE emptyRange{ 0, 0 };
     readbackResource->Unmap(0,&emptyRange);
 
-    return i420_buffer; 
+    return i420_buffer;
 }
 
 } // end namespace webrtc

@@ -71,14 +71,14 @@ ITexture2D* VulkanGraphicsDevice::CreateDefaultTextureV(const uint32_t w, const 
     }
 
     //Transition to dest
-    if (VK_SUCCESS!= VulkanUtility::DoImageLayoutTransition(m_device, m_commandPool, m_graphicsQueue, 
-            vulkanTexture->GetImage(), vulkanTexture->GetTextureFormat(), 
+    if (VK_SUCCESS!= VulkanUtility::DoImageLayoutTransition(m_device, m_commandPool, m_graphicsQueue,
+            vulkanTexture->GetImage(), vulkanTexture->GetTextureFormat(),
             VK_IMAGE_LAYOUT_UNDEFINED, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT))
     {
         vulkanTexture->Shutdown();
         delete (vulkanTexture);
-        return nullptr;       
+        return nullptr;
     }
 
     return vulkanTexture;
@@ -114,10 +114,10 @@ bool VulkanGraphicsDevice::CopyResourceV(ITexture2D* dest, ITexture2D* src) {
     if (destTexture == nullptr || srcTexture == nullptr)
         return false;
 
-    //Transition the src texture layout. 
+    //Transition the src texture layout.
     VULKAN_CHECK_FAILVALUE(
-        VulkanUtility::DoImageLayoutTransition(m_device, m_commandPool, m_graphicsQueue, 
-            srcTexture->GetImage(), srcTexture->GetTextureFormat(), 
+        VulkanUtility::DoImageLayoutTransition(m_device, m_commandPool, m_graphicsQueue,
+            srcTexture->GetImage(), srcTexture->GetTextureFormat(),
             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT,
             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT
         ),
@@ -135,8 +135,8 @@ bool VulkanGraphicsDevice::CopyResourceV(ITexture2D* dest, ITexture2D* src) {
 
     //transition the src texture layout back to VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
     VULKAN_CHECK_FAILVALUE(
-        VulkanUtility::DoImageLayoutTransition(m_device, m_commandPool, m_graphicsQueue, 
-            srcTexture->GetImage(), srcTexture->GetTextureFormat(), 
+        VulkanUtility::DoImageLayoutTransition(m_device, m_commandPool, m_graphicsQueue,
+            srcTexture->GetImage(), srcTexture->GetTextureFormat(),
             VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT,
             VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_PIPELINE_STAGE_TRANSFER_BIT
         ),
@@ -155,7 +155,7 @@ bool VulkanGraphicsDevice::CopyResourceFromNativeV(
     VulkanTexture2D* destTexture = reinterpret_cast<VulkanTexture2D*>(dest);
     UnityVulkanImage* unityVulkanImage = static_cast<UnityVulkanImage*>(nativeTexturePtr);
 
-    //Transition the src texture layout. 
+    //Transition the src texture layout.
     VkResult result = VulkanUtility::DoImageLayoutTransition(
         m_device, m_commandPool, m_graphicsQueue,
         unityVulkanImage->image, unityVulkanImage->format,
@@ -187,7 +187,7 @@ VkResult VulkanGraphicsDevice::CreateCommandPool() {
     VkCommandPoolCreateInfo poolInfo = {};
     poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     poolInfo.queueFamilyIndex = m_queueFamilyIndex;
-    poolInfo.flags = 0; 
+    poolInfo.flags = 0;
 
     return vkCreateCommandPool(m_device, &poolInfo, m_allocator, &m_commandPool);
 }

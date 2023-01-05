@@ -3,6 +3,10 @@
 #include "D3D11Texture2D.h"
 #include "GraphicsDevice/GraphicsUtility.h"
 
+#include <chrono>
+
+#define D3D11Log(...)       LogPrint("webrtc Log: D3D11::" __VA_ARGS__)
+
 namespace unity
 {
 namespace webrtc
@@ -103,11 +107,14 @@ rtc::scoped_refptr<webrtc::I420Buffer> D3D11GraphicsDevice::ConvertRGBToI420(ITe
     if (nullptr == nativeTex)
         return nullptr;
 
+    // auto map_start = std::chrono::high_resolution_clock::now();
     const HRESULT hr = m_d3d11Context->Map(nativeTex, 0, D3D11_MAP_READ, 0, &resource);
     assert(hr == S_OK);
     if (hr!=S_OK) {
         return nullptr;
     }
+    // auto map_end = std::chrono::high_resolution_clock::now();
+    // D3D11Log("Map time = %d", std::chrono::duration_cast<std::chrono::milliseconds>(map_end - map_start).count());
 
     const uint32_t width = tex->GetWidth();
     const uint32_t height = tex->GetHeight();
@@ -115,6 +122,8 @@ rtc::scoped_refptr<webrtc::I420Buffer> D3D11GraphicsDevice::ConvertRGBToI420(ITe
     rtc::scoped_refptr<webrtc::I420Buffer> i420_buffer = GraphicsUtility::ConvertRGBToI420Buffer(
         width, height, resource.RowPitch, static_cast<uint8_t*>(resource.pData)
     );
+    // auto convert_end = std::chrono::high_resolution_clock::now();
+    // D3D11Log("Convert time = %d", std::chrono::duration_cast<std::chrono::milliseconds>(convert_end - map_end).count());
 
     m_d3d11Context->Unmap(nativeTex, 0);
     return i420_buffer;

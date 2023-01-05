@@ -204,6 +204,24 @@ namespace Unity.WebRTC
             WebRTC.Context.Encode(GetSelfOrThrow());
         }
 
+        public void BiltTexture()
+        {
+            if (m_needFlip)
+            {
+                Graphics.Blit(m_sourceTexture, m_destTexture, WebRTC.flipMat);
+            }
+        }
+
+        public void EncodeSendTexture()
+        {
+            WebRTC.Context.Encode(GetSelfOrThrow());
+        }
+
+        public void UpdateSendTexture()
+        {
+            Update();
+        }
+
         /// <summary>
         /// Creates a new VideoStream object.
         /// The track is created with a `source`.

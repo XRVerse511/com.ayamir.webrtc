@@ -1,9 +1,13 @@
 #include "pch.h"
 #include "UnityVideoTrackSource.h"
+#include <chrono>
+#include <ctime>
 
 #include <mutex>
 
 #include "Codec/IEncoder.h"
+
+#define UnityVideoTrackSourceLog(...)       LogPrint("webrtc Log: UnityVideoTrackSource.cpp::" __VA_ARGS__)
 
 namespace unity
 {
@@ -116,16 +120,23 @@ void UnityVideoTrackSource::OnFrameCaptured(int64_t timestamp_us)
         LogPrint("encoder is null");
         return;
     }
+    // auto copy_start = std::chrono::system_clock::now();
     if (!encoder_->CopyBuffer(frame_))
     {
         LogPrint("Copy texture buffer is failed");
         return;
     }
+    // auto copy_end = std::chrono::system_clock::now();
+    // std::chrono::duration<double> copy_cost = copy_end - copy_start;
+    // UnityVideoTrackSourceLog("CopyBuffer cost %lf", copy_cost);
     if (!encoder_->EncodeFrame(timestamp_us, priority_array()))
     {
         LogPrint("Encode frame is failed");
         return;
     }
+    // auto encode_end = std::chrono::system_clock::now();
+    // std::chrono::duration<double> encode_cost = encode_end - copy_end;
+    // UnityVideoTrackSourceLog("EncodeFrame cost %lf", encode_cost);
 }
 
 } // end namespace webrtc

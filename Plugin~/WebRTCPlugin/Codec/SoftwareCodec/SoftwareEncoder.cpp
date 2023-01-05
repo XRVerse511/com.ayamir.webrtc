@@ -3,6 +3,8 @@
 #include "GraphicsDevice/IGraphicsDevice.h"
 #include "GraphicsDevice/ITexture2D.h"
 
+#include <chrono>
+
 #if defined(_WIN32)
 #else
 #include <dlfcn.h>
@@ -89,9 +91,13 @@ namespace unity
         {
             // LG("EncodeFrame: before frame build: priorityArray: %p", priorityArray);
 
+            // auto convert_start = std::chrono::system_clock::now();
             const rtc::scoped_refptr<webrtc::I420Buffer> i420Buffer = m_device->ConvertRGBToI420(m_encodeTex);
             if (nullptr == i420Buffer)
                 return false;
+            // auto convert_end = std::chrono::system_clock::now();
+            // std::chrono::duration<double> convert_cost = convert_end - convert_start;
+            // LG("EncodeFrame: convert cost: %lf", convert_cost.count());
 
             webrtc::VideoFrame frame =
                 webrtc::VideoFrame::Builder()

@@ -33,7 +33,7 @@ bool OpenGLGraphicsDevice::InitV()
 #if SUPPORT_OPENGL_CORE
     glDebugMessageCallback(OnOpenGLDebugMessage, nullptr);
     glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, &unusedIds, true);
-#endif    
+#endif
 #endif
 
 #if SUPPORT_OPENGL_ES
@@ -61,7 +61,7 @@ void OpenGLGraphicsDevice::ShutdownV() {
 
 //---------------------------------------------------------------------------------------------------------------------
 ITexture2D* OpenGLGraphicsDevice::CreateDefaultTextureV(
-    uint32_t w, uint32_t h, UnityRenderingExtTextureFormat textureFormat) 
+    uint32_t w, uint32_t h, UnityRenderingExtTextureFormat textureFormat)
 {
     GLuint tex;
     glGenTextures(1, &tex);
@@ -150,7 +150,7 @@ void GetTexImage(GLenum target, GLint level, GLenum format, GLenum type, void *p
 
     GLint tex;
     glGetIntegerv(GL_TEXTURE_BINDING_2D, &tex);
-    
+
     glFramebufferTexture2D(GL_FRAMEBUFFER,
         GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
 
