@@ -229,7 +229,7 @@ namespace Unity.WebRTC
             NativeMethods.ContextSetObjectRangeForVideoTrackSource(self, videoTrackSourcePtr, xStart, xEnd, yStart, yEnd, qpOffset);
         }
 
-        public void SetPriorityArrayForVideoTrackSource(IntPtr videoTrackSourcePtr, ref int[] myColors)
+        public void SetPriorityArrayForVideoTrackSource(IntPtr videoTrackSourcePtr, ref uint[] myColors)
         {
             NativeMethods.ContextSetPriorityArrayForVideoTrackSource(self, videoTrackSourcePtr, myColors);
         }

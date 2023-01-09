@@ -381,7 +381,7 @@ namespace webrtc
         static_cast<UnityVideoTrackSource*>(source)->SetObjectRange(iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
     }
 
-    void Context::SetPriorityArrayForVideoTrackSource(VideoTrackSourceInterface* source, int* priorityArray)
+    void Context::SetPriorityArrayForVideoTrackSource(VideoTrackSourceInterface* source, uint32_t* priorityArray)
     {
         static_cast<UnityVideoTrackSource*>(source)->SetPriorityArray(priorityArray);
     }

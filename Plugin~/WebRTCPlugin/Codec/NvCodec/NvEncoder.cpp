@@ -340,7 +340,7 @@ namespace webrtc
     }
 
     //entry for encoding a frame
-    bool NvEncoder::EncodeFrame(int64_t timestamp_us, int* priorityArray)
+    bool NvEncoder::EncodeFrame(int64_t timestamp_us, uint32_t* priorityArray)
     {
         UpdateSettings();
         uint32 bufferIndexToWrite = frameCount % bufferedFrameNum;

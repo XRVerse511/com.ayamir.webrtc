@@ -87,7 +87,7 @@ namespace unity
             return true;
         }
 
-        bool SoftwareEncoder::EncodeFrame(int64_t timestamp_us, int* priorityArray)
+        bool SoftwareEncoder::EncodeFrame(int64_t timestamp_us, uint32_t* priorityArray)
         {
             // LG("EncodeFrame: before frame build: priorityArray: %p", priorityArray);
 

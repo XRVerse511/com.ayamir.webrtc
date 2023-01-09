@@ -151,7 +151,7 @@ namespace Unity.WebRTC
             }
         }
 
-        public void SetSourcePriorityArray(ref int[] myColors)
+        public void SetSourcePriorityArray(ref uint[] myColors)
         {
             if (_source != null)
             {
@@ -376,7 +376,7 @@ namespace Unity.WebRTC
             WebRTC.Context.SetObjectRangeForVideoTrackSource(GetSelfOrThrow(), objectRange.iXStart, objectRange.iXEnd, objectRange.iYStart, objectRange.iYEnd, objectRange.iQpOffset);
         }
 
-        public void SetPriorityArray(ref int[] myColors)
+        public void SetPriorityArray(ref uint[] myColors)
         {
             WebRTC.Context.SetPriorityArrayForVideoTrackSource(GetSelfOrThrow(), ref myColors);
         }

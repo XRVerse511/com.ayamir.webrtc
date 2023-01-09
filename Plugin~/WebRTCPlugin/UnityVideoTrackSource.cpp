@@ -74,7 +74,7 @@ absl::optional<webrtc::VideoFrame::ObjectRange> UnityVideoTrackSource::object_ra
     return object_range_;
 }
 
-int* UnityVideoTrackSource::priority_array() const
+uint32_t* UnityVideoTrackSource::priority_array() const
 {
     return priority_array_;
 }
@@ -84,7 +84,7 @@ void UnityVideoTrackSource::SetObjectRange(short iXStart, short iXEnd, short iYS
     object_range_ = webrtc::VideoFrame::ObjectRange(iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
 }
 
-void UnityVideoTrackSource::SetPriorityArray(int* priorityArray)
+void UnityVideoTrackSource::SetPriorityArray(uint32_t* priorityArray)
 {
     priority_array_ = priorityArray;
 }

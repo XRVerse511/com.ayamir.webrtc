@@ -41,7 +41,7 @@ class UnityVideoTrackSource :
     bool is_screencast() const override;
     absl::optional<bool> needs_denoising() const override;
     absl::optional<webrtc::VideoFrame::ObjectRange> object_range() const;
-    int* priority_array() const;
+    uint32_t* priority_array() const;
 
     // note:: call from render thread
     void Init(void* frame);
@@ -61,7 +61,7 @@ class UnityVideoTrackSource :
     using ::webrtc::VideoTrackSourceInterface::RemoveSink;
 
     void SetObjectRange(short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset);
-    void SetPriorityArray(int* myColors);
+    void SetPriorityArray(uint32_t* myColors);
 
  private:
     FrameAdaptationParams ComputeAdaptationParams(
@@ -89,7 +89,7 @@ class UnityVideoTrackSource :
     void* frame_;
     webrtc::Clock* clock_;
     absl::optional<webrtc::VideoFrame::ObjectRange> object_range_;
-    int* priority_array_;
+    uint32_t* priority_array_;
 };
 
 } // end namespace webrtc
