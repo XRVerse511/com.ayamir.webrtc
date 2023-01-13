@@ -129,10 +129,18 @@ void UnityVideoTrackSource::OnFrameCaptured(int64_t timestamp_us)
     // auto copy_end = std::chrono::system_clock::now();
     // std::chrono::duration<double> copy_cost = copy_end - copy_start;
     // UnityVideoTrackSourceLog("CopyBuffer cost %lf", copy_cost);
-    if (!encoder_->EncodeFrame(timestamp_us, priority_array()))
-    {
-        LogPrint("Encode frame is failed");
-        return;
+    if (priority_array() == nullptr) {
+        if (!encoder_->EncodeFrame(timestamp_us))
+        {
+            LogPrint("Encode frame is failed");
+            return;
+        }
+    } else {
+        if (!encoder_->EncodeFrame(timestamp_us, priority_array()))
+        {
+            LogPrint("Encode frame is failed");
+            return;
+        }
     }
     // auto encode_end = std::chrono::system_clock::now();
     // std::chrono::duration<double> encode_cost = encode_end - copy_end;

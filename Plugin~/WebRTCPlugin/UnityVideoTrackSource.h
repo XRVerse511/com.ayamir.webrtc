@@ -89,7 +89,7 @@ class UnityVideoTrackSource :
     void* frame_;
     webrtc::Clock* clock_;
     absl::optional<webrtc::VideoFrame::ObjectRange> object_range_;
-    uint32_t* priority_array_;
+    uint32_t* priority_array_ = nullptr;
 };
 
 } // end namespace webrtc
