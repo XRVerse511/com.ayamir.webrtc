@@ -21,8 +21,6 @@ namespace webrtc
         void UpdateSettings() override {}
         bool CopyBuffer(void* frame) override;
         bool EncodeFrame(int64_t timestamp_us) override;
-        // NOTE: use EncodeFrame dynamic dispatch version to encode with object range;
-        bool EncodeFrame(int64_t timestamp_us, const absl::optional<webrtc::VideoFrame::ObjectRange> objectRange) override;
         bool EncodeFrame(int64_t timestamp_us, uint32_t* priorityArray) override;
         bool IsSupported() const override { return true; }
         void SetIdrFrame() override {}

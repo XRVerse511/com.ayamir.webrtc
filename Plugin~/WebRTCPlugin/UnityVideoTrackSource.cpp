@@ -25,19 +25,6 @@ UnityVideoTrackSource::UnityVideoTrackSource(
 //  DETACH_FROM_THREAD(thread_checker_);
 }
 
-UnityVideoTrackSource::UnityVideoTrackSource(
-    bool is_screencast,
-    absl::optional<bool> needs_denoising,
-    const absl::optional<webrtc::VideoFrame::ObjectRange>& object_range) :
-    AdaptedVideoTrackSource(/*required_alignment=*/1),
-    is_screencast_(is_screencast),
-    needs_denoising_(needs_denoising),
-    object_range_(object_range),
-    encoder_(nullptr)
-{
-//  DETACH_FROM_THREAD(thread_checker_);
-}
-
 UnityVideoTrackSource::~UnityVideoTrackSource()
 {
     {
@@ -69,19 +56,9 @@ absl::optional<bool> UnityVideoTrackSource::needs_denoising() const
     return needs_denoising_;
 }
 
-absl::optional<webrtc::VideoFrame::ObjectRange> UnityVideoTrackSource::object_range() const
-{
-    return object_range_;
-}
-
 uint32_t* UnityVideoTrackSource::priority_array() const
 {
     return priority_array_;
-}
-
-void UnityVideoTrackSource::SetObjectRange(short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset)
-{
-    object_range_ = webrtc::VideoFrame::ObjectRange(iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
 }
 
 void UnityVideoTrackSource::SetPriorityArray(uint32_t* priorityArray)

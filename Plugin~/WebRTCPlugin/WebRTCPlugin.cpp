@@ -282,14 +282,9 @@ extern "C"
         context->StopMediaStreamTrack(track);
     }
 
-    UNITY_INTERFACE_EXPORT webrtc::VideoTrackSourceInterface* ContextCreateVideoTrackSource(Context* context, short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset)
+    UNITY_INTERFACE_EXPORT webrtc::VideoTrackSourceInterface* ContextCreateVideoTrackSource(Context* context)
     {
-        return context->CreateVideoSource(iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
-    }
-
-    UNITY_INTERFACE_EXPORT void ContextSetObjectRangeForVideoTrackSource(Context* context, webrtc::VideoTrackSourceInterface* source, short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset)
-    {
-        context->SetObjectRangeForVideoTrackSource(source, iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
+        return context->CreateVideoSource();
     }
 
     UNITY_INTERFACE_EXPORT void ContextSetPriorityArrayForVideoTrackSource(Context* context, webrtc::VideoTrackSourceInterface* source, uint32_t* priorityArray)

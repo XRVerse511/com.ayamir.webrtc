@@ -367,18 +367,12 @@ namespace webrtc
         return m_mapMediaStreamObserver[stream].get();
     }
 
-    VideoTrackSourceInterface* Context::CreateVideoSource(short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset)
+    VideoTrackSourceInterface* Context::CreateVideoSource()
     {
-        auto objectRange = absl::make_optional<webrtc::VideoFrame::ObjectRange>(iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
         rtc::scoped_refptr<UnityVideoTrackSource> source =
-            new rtc::RefCountedObject<UnityVideoTrackSource>(false, absl::nullopt, objectRange);
+            new rtc::RefCountedObject<UnityVideoTrackSource>(false, absl::nullopt);
         AddRefPtr(source);
         return source;
-    }
-
-    void Context::SetObjectRangeForVideoTrackSource(VideoTrackSourceInterface* source, short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset)
-    {
-        static_cast<UnityVideoTrackSource*>(source)->SetObjectRange(iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
     }
 
     void Context::SetPriorityArrayForVideoTrackSource(VideoTrackSourceInterface* source, uint32_t* priorityArray)

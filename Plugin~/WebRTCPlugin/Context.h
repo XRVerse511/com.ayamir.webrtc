@@ -96,8 +96,7 @@ namespace webrtc
         webrtc::AudioSourceInterface* CreateAudioSource();
 
         // Video Source
-        webrtc::VideoTrackSourceInterface* CreateVideoSource(short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset);
-        void SetObjectRangeForVideoTrackSource(webrtc::VideoTrackSourceInterface* source, short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset);
+        webrtc::VideoTrackSourceInterface* CreateVideoSource();
         void SetPriorityArrayForVideoTrackSource(webrtc::VideoTrackSourceInterface* source, uint32_t* priorityArray);
 
         // MediaStreamTrack

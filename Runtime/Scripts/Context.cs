@@ -219,14 +219,9 @@ namespace Unity.WebRTC
             return NativeMethods.GetUpdateTextureFunc(self);
         }
 
-        public IntPtr CreateVideoTrackSource(short iXStart, short iXEnd, short iYStart, short iYEnd, int iQpOffset)
+        public IntPtr CreateVideoTrackSource()
         {
-            return NativeMethods.ContextCreateVideoTrackSource(self, iXStart, iXEnd, iYStart, iYEnd, iQpOffset);
-        }
-
-        public void SetObjectRangeForVideoTrackSource(IntPtr videoTrackSourcePtr, short xStart, short xEnd, short yStart, short yEnd, int qpOffset)
-        {
-            NativeMethods.ContextSetObjectRangeForVideoTrackSource(self, videoTrackSourcePtr, xStart, xEnd, yStart, yEnd, qpOffset);
+            return NativeMethods.ContextCreateVideoTrackSource(self);
         }
 
         public void SetPriorityArrayForVideoTrackSource(IntPtr videoTrackSourcePtr, ref uint[] myColors)
