@@ -56,12 +56,12 @@ absl::optional<bool> UnityVideoTrackSource::needs_denoising() const
     return needs_denoising_;
 }
 
-uint32_t* UnityVideoTrackSource::priority_array() const
+float* UnityVideoTrackSource::priority_array() const
 {
     return priority_array_;
 }
 
-void UnityVideoTrackSource::SetPriorityArray(uint32_t* priorityArray)
+void UnityVideoTrackSource::SetPriorityArray(float* priorityArray)
 {
     priority_array_ = priorityArray;
 }

@@ -224,9 +224,9 @@ namespace Unity.WebRTC
             return NativeMethods.ContextCreateVideoTrackSource(self);
         }
 
-        public void SetPriorityArrayForVideoTrackSource(IntPtr videoTrackSourcePtr, ref uint[] myColors)
+        public void SetPriorityArrayForVideoTrackSource(IntPtr videoTrackSourcePtr, ref float[] weights)
         {
-            NativeMethods.ContextSetPriorityArrayForVideoTrackSource(self, videoTrackSourcePtr, myColors);
+            NativeMethods.ContextSetPriorityArrayForVideoTrackSource(self, videoTrackSourcePtr, weights);
         }
 
         public IntPtr CreateAudioTrackSource()

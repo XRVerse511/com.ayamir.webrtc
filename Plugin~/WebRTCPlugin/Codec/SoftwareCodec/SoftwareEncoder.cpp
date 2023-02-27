@@ -62,17 +62,13 @@ namespace unity
             return true;
         }
 
-        bool SoftwareEncoder::EncodeFrame(int64_t timestamp_us, uint32_t* priorityArray)
+        bool SoftwareEncoder::EncodeFrame(int64_t timestamp_us, float* priorityArray)
         {
             // LG("EncodeFrame: before frame build: priorityArray: %p", priorityArray);
 
-            // auto convert_start = std::chrono::system_clock::now();
             const rtc::scoped_refptr<webrtc::I420Buffer> i420Buffer = m_device->ConvertRGBToI420(m_encodeTex);
             if (nullptr == i420Buffer)
                 return false;
-            // auto convert_end = std::chrono::system_clock::now();
-            // std::chrono::duration<double> convert_cost = convert_end - convert_start;
-            // LG("EncodeFrame: convert cost: %lf", convert_cost.count());
 
             webrtc::VideoFrame frame =
                 webrtc::VideoFrame::Builder()

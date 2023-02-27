@@ -97,7 +97,7 @@ namespace webrtc
 
         // Video Source
         webrtc::VideoTrackSourceInterface* CreateVideoSource();
-        void SetPriorityArrayForVideoTrackSource(webrtc::VideoTrackSourceInterface* source, uint32_t* priorityArray);
+        void SetPriorityArrayForVideoTrackSource(webrtc::VideoTrackSourceInterface* source, float* priorityArray);
 
         // MediaStreamTrack
         webrtc::VideoTrackInterface* CreateVideoTrack(const std::string& label, webrtc::VideoTrackSourceInterface* source);

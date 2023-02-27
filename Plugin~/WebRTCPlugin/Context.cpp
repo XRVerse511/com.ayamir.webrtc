@@ -375,7 +375,7 @@ namespace webrtc
         return source;
     }
 
-    void Context::SetPriorityArrayForVideoTrackSource(VideoTrackSourceInterface* source, uint32_t* priorityArray)
+    void Context::SetPriorityArrayForVideoTrackSource(VideoTrackSourceInterface* source, float* priorityArray)
     {
         static_cast<UnityVideoTrackSource*>(source)->SetPriorityArray(priorityArray);
     }

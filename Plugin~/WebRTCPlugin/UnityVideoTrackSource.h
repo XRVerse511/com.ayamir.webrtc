@@ -38,7 +38,7 @@ class UnityVideoTrackSource :
     bool remote() const override;
     bool is_screencast() const override;
     absl::optional<bool> needs_denoising() const override;
-    uint32_t* priority_array() const;
+    float* priority_array() const;
 
     // note:: call from render thread
     void Init(void* frame);
@@ -57,7 +57,7 @@ class UnityVideoTrackSource :
     using ::webrtc::VideoTrackSourceInterface::AddOrUpdateSink;
     using ::webrtc::VideoTrackSourceInterface::RemoveSink;
 
-    void SetPriorityArray(uint32_t* myColors);
+    void SetPriorityArray(float* weights);
 
  private:
     FrameAdaptationParams ComputeAdaptationParams(
@@ -84,7 +84,7 @@ class UnityVideoTrackSource :
     IEncoder* encoder_;
     void* frame_;
     webrtc::Clock* clock_;
-    uint32_t* priority_array_ = nullptr;
+    float* priority_array_ = nullptr;
 };
 
 } // end namespace webrtc

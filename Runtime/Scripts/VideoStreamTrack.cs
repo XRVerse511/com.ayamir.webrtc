@@ -74,12 +74,9 @@ namespace Unity.WebRTC
         /// </summary>
         public Texture Texture => m_destTexture;
 
-        public void SetSourcePriorityArray(ref uint[] myColors)
+        public void SetSourcePriorityArray(ref float[] weights)
         {
-            if (_source != null)
-            {
-                _source.SetPriorityArray(ref myColors);
-            }
+            _source?.SetPriorityArray(ref weights);
         }
 
         public Texture InitializeReceiver(int width, int height)
@@ -265,9 +262,9 @@ namespace Unity.WebRTC
             this.Dispose();
         }
 
-        public void SetPriorityArray(ref uint[] myColors)
+        public void SetPriorityArray(ref float[] weights)
         {
-            WebRTC.Context.SetPriorityArrayForVideoTrackSource(GetSelfOrThrow(), ref myColors);
+            WebRTC.Context.SetPriorityArrayForVideoTrackSource(GetSelfOrThrow(), ref weights);
         }
 
         public override void Dispose()

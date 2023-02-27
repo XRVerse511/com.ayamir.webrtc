@@ -5,8 +5,11 @@
 #include "Vulkan/VulkanGraphicsDevice.h"
 #endif
 
+#include <algorithm>
 #include <chrono>
+#include <functional>
 #include <thread>
+#include <vector>
 
 #define GraphicsUtilityLog(...)       LogPrint("webrtc Log: GraphicsUtility::" __VA_ARGS__)
 
@@ -59,41 +62,14 @@ rtc::scoped_refptr<webrtc::I420Buffer> GraphicsUtility::ConvertRGBToI420Buffer(c
     uint8_t* yuv_u = i420_buffer->MutableDataU();
     uint8_t* yuv_v = i420_buffer->MutableDataV();
 
-    int threadCount = 8;
+    const int threadCount = 8;
     auto uvDelta = height / (threadCount * 4);
     auto heightDelta = height / threadCount;
-    std::thread t0(ConvertRGBToI420BufferInThread, srcData, yuv_y, yuv_u, yuv_v, 0 * heightDelta, 0 * uvDelta, width, heightDelta, rowToRowInBytes);
-    std::thread t1(ConvertRGBToI420BufferInThread, srcData, yuv_y, yuv_u, yuv_v, 1 * heightDelta, 1 * uvDelta, width, heightDelta, rowToRowInBytes);
-    std::thread t2(ConvertRGBToI420BufferInThread, srcData, yuv_y, yuv_u, yuv_v, 2 * heightDelta, 2 * uvDelta, width, heightDelta, rowToRowInBytes);
-    std::thread t3(ConvertRGBToI420BufferInThread, srcData, yuv_y, yuv_u, yuv_v, 3 * heightDelta, 3 * uvDelta, width, heightDelta, rowToRowInBytes);
-    std::thread t4(ConvertRGBToI420BufferInThread, srcData, yuv_y, yuv_u, yuv_v, 4 * heightDelta, 4 * uvDelta, width, heightDelta, rowToRowInBytes);
-    std::thread t5(ConvertRGBToI420BufferInThread, srcData, yuv_y, yuv_u, yuv_v, 5 * heightDelta, 5 * uvDelta, width, heightDelta, rowToRowInBytes);
-    std::thread t6(ConvertRGBToI420BufferInThread, srcData, yuv_y, yuv_u, yuv_v, 6 * heightDelta, 6 * uvDelta, width, heightDelta, rowToRowInBytes);
-    std::thread t7(ConvertRGBToI420BufferInThread, srcData, yuv_y, yuv_u, yuv_v, 7 * heightDelta, 7 * uvDelta, width, heightDelta, rowToRowInBytes);
-    if (t0.joinable()) {
-        t0.join();
+    std::vector<std::thread> threads;
+    for (int i = 0; i < threadCount; i++) {
+        threads.push_back(std::thread(ConvertRGBToI420BufferInThread, srcData, yuv_y, yuv_u, yuv_v, i * heightDelta, i * uvDelta, width, heightDelta, rowToRowInBytes));
     }
-    if (t1.joinable()) {
-        t1.join();
-    }
-    if (t2.joinable()) {
-        t2.join();
-    }
-    if (t3.joinable()) {
-        t3.join();
-    }
-    if (t4.joinable()) {
-        t4.join();
-    }
-    if (t5.joinable()) {
-        t5.join();
-    }
-    if (t6.joinable()) {
-        t6.join();
-    }
-    if (t7.joinable()) {
-        t7.join();
-    }
+    std::for_each(threads.begin(), threads.end(), std::mem_fn(&std::thread::join));
 
     return i420_buffer;
 }

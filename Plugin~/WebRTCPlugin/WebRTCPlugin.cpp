@@ -287,7 +287,7 @@ extern "C"
         return context->CreateVideoSource();
     }
 
-    UNITY_INTERFACE_EXPORT void ContextSetPriorityArrayForVideoTrackSource(Context* context, webrtc::VideoTrackSourceInterface* source, uint32_t* priorityArray)
+    UNITY_INTERFACE_EXPORT void ContextSetPriorityArrayForVideoTrackSource(Context* context, webrtc::VideoTrackSourceInterface* source, float* priorityArray)
     {
         context->SetPriorityArrayForVideoTrackSource(source, priorityArray);
     }

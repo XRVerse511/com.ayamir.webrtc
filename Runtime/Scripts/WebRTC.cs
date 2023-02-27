@@ -815,7 +815,7 @@ namespace Unity.WebRTC
         [DllImport(WebRTC.Lib)]
         public static extern IntPtr ContextCreateVideoTrackSource(IntPtr ptr);
         [DllImport(WebRTC.Lib, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ContextSetPriorityArrayForVideoTrackSource(IntPtr ptr, IntPtr videoTrackSourcePtr, uint[] myColors);
+        public static extern void ContextSetPriorityArrayForVideoTrackSource(IntPtr ptr, IntPtr videoTrackSourcePtr, float[] weights);
         [DllImport(WebRTC.Lib)]
         public static extern IntPtr ContextCreateVideoTrack(IntPtr ptr, [MarshalAs(UnmanagedType.LPStr, SizeConst = 256)] string label, IntPtr trackSource);
         [DllImport(WebRTC.Lib)]
