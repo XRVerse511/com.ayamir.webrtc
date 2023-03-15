@@ -50,6 +50,15 @@ namespace unity
             if (nullptr == i420Buffer)
                 return false;
 
+            // std::string filename = "D:\\MM\\record.yuv";
+            // static FILE *fp = fopen(filename.c_str(), "wb+");
+            // if (fp != NULL) {
+            //    fwrite(i420Buffer->MutableDataY(), 1, i420Buffer->width() * i420Buffer->height(), fp);
+            //    fwrite(i420Buffer->MutableDataU(), 1, i420Buffer->width() * i420Buffer->height() / 4, fp);
+            //    fwrite(i420Buffer->MutableDataV(), 1, i420Buffer->width() * i420Buffer->height() / 4, fp);
+            //    fflush(fp);
+            // }
+
             webrtc::VideoFrame frame =
                 webrtc::VideoFrame::Builder()
                 .set_video_frame_buffer(i420Buffer)
